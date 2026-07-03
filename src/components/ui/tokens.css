@@ -1,0 +1,147 @@
+/*
+ * Employee Dashboard — Design tokens
+ * Values sourced from design.md (color, typography, spacing, radius).
+ *
+ * Theme resolution:
+ *   - :root and [data-theme="light"]           -> light
+ *   - [data-theme="dark"]                       -> dark (explicit)
+ *   - no data-theme + OS dark preference        -> dark (auto)
+ */
+
+:root {
+  /* Typography */
+  --font-family-base: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+
+  --font-size-hero: clamp(2.5rem, 5vw, 4rem);
+  --font-size-h2: clamp(1.75rem, 3vw, 2.5rem);
+  --font-size-h3: 1.25rem;
+  --font-size-body: 1rem;
+  --font-size-small: 0.875rem;
+  --font-size-stat: clamp(2rem, 4vw, 3rem);
+
+  --line-height-tight: 1.1;
+  --line-height-body: 1.6;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --letter-spacing-tight: -0.02em;
+
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+
+  /* Layout */
+  --container-max: 1280px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-pill: 999px;
+
+  /* Elevation (light mode only per design; dark relies on surface tone) */
+  --shadow-sm: 0 1px 2px rgba(27, 27, 27, 0.06);
+  --shadow-md: 0 4px 12px rgba(27, 27, 27, 0.08);
+  --shadow-lg: 0 12px 32px rgba(27, 27, 27, 0.12);
+
+  /* Status (derived from accent + neutral system for badges/toasts) */
+  --color-warning: #B26B00;
+  --color-warning-soft: #F5E6C8;
+  --color-danger: #9B2C2C;
+  --color-danger-soft: #F5D9D9;
+  --color-info: #2C5A9B;
+  --color-info-soft: #D9E4F5;
+}
+
+/* ---- Light (default + explicit) ---- */
+:root,
+:root[data-theme='light'] {
+  --color-bg: #efefee;
+  --color-surface: #ffffff;
+  --color-surface-alt: #e4e4e1;
+  --color-text-primary: #1b1b1b;
+  --color-text-secondary: #515150;
+  --color-text-muted: #8a8a87;
+  --color-border: #d8d8d5;
+
+  --color-accent: #3b4505;
+  --color-accent-soft: #cad68a;
+  --color-accent-contrast: #ffffff;
+
+  --color-cta-bg: #1b1b1b;
+  --color-cta-text: #efefee;
+
+  --color-success: #3b4505;
+  --color-success-soft: #cad68a;
+  --color-focus-ring: #3b4505;
+
+  --shadow-card: var(--shadow-md);
+}
+
+/* ---- Dark (explicit) ---- */
+:root[data-theme='dark'] {
+  --color-bg: #1b1b1b;
+  --color-surface: #232322;
+  --color-surface-alt: #313130;
+  --color-text-primary: #efefee;
+  --color-text-secondary: #b5b5b2;
+  --color-text-muted: #7c7c79;
+  --color-border: #3a3a38;
+
+  --color-accent: #cad68a;
+  --color-accent-soft: #32331b;
+  --color-accent-contrast: #1b1b1b;
+
+  --color-cta-bg: #efefee;
+  --color-cta-text: #1b1b1b;
+
+  --color-success: #cad68a;
+  --color-success-soft: #32331b;
+  --color-focus-ring: #cad68a;
+
+  --color-warning: #E0A94A;
+  --color-warning-soft: #3a3117;
+  --color-danger: #E08A8A;
+  --color-danger-soft: #3a1f1f;
+  --color-info: #8AB0E0;
+  --color-info-soft: #1f2a3a;
+
+  --shadow-card: none;
+}
+
+/* ---- Dark (auto, when no explicit theme is set) ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not([data-theme='dark']) {
+    --color-bg: #1b1b1b;
+    --color-surface: #232322;
+    --color-surface-alt: #313130;
+    --color-text-primary: #efefee;
+    --color-text-secondary: #b5b5b2;
+    --color-text-muted: #7c7c79;
+    --color-border: #3a3a38;
+
+    --color-accent: #cad68a;
+    --color-accent-soft: #32331b;
+    --color-accent-contrast: #1b1b1b;
+
+    --color-cta-bg: #efefee;
+    --color-cta-text: #1b1b1b;
+
+    --color-success: #cad68a;
+    --color-success-soft: #32331b;
+    --color-focus-ring: #cad68a;
+
+    --color-warning: #E0A94A;
+    --color-warning-soft: #3a3117;
+    --color-danger: #E08A8A;
+    --color-danger-soft: #3a1f1f;
+    --color-info: #8AB0E0;
+    --color-info-soft: #1f2a3a;
+
+    --shadow-card: none;
+  }
+}
