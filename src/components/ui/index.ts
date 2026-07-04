@@ -28,13 +28,10 @@ export type { TableProps, Column } from './Table'
 export { Skeleton } from './Skeleton'
 export type { SkeletonProps } from './Skeleton'
 
-export { ToastProvider, useToast } from './Toast'
-export type {
-  ToastProviderProps,
-  ToastOptions,
-  ToastVariant,
-  ToastPosition,
-} from './Toast'
+export { ToastProvider } from './Toast'
+export type { ToastProviderProps } from './Toast'
+export { useToast } from './toastContext'
+export type { ToastOptions, ToastVariant, ToastPosition } from './toastContext'
 
 export { EmptyState } from './EmptyState'
 export type { EmptyStateProps } from './EmptyState'

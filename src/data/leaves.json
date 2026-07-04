@@ -1,0 +1,68 @@
+[
+  {
+    "id": "lv-1",
+    "employeeId": "emp-1",
+    "type": "annual",
+    "startDate": "2026-07-20",
+    "endDate": "2026-07-24",
+    "days": 5,
+    "reason": "Family trip",
+    "status": "approved",
+    "appliedAt": "2026-06-28T10:12:00Z"
+  },
+  {
+    "id": "lv-2",
+    "employeeId": "emp-1",
+    "type": "sick",
+    "startDate": "2026-06-11",
+    "endDate": "2026-06-11",
+    "days": 1,
+    "reason": "Fever",
+    "status": "approved",
+    "appliedAt": "2026-06-11T07:30:00Z"
+  },
+  {
+    "id": "lv-3",
+    "employeeId": "emp-1",
+    "type": "casual",
+    "startDate": "2026-08-01",
+    "endDate": "2026-08-01",
+    "days": 1,
+    "reason": "Personal errand",
+    "status": "pending",
+    "appliedAt": "2026-07-02T15:45:00Z"
+  },
+  {
+    "id": "lv-4",
+    "employeeId": "emp-3",
+    "type": "annual",
+    "startDate": "2026-07-14",
+    "endDate": "2026-07-16",
+    "days": 3,
+    "reason": "Wedding in the family",
+    "status": "pending",
+    "appliedAt": "2026-07-01T09:05:00Z"
+  },
+  {
+    "id": "lv-5",
+    "employeeId": "emp-6",
+    "type": "sick",
+    "startDate": "2026-07-03",
+    "endDate": "2026-07-04",
+    "days": 2,
+    "reason": "Migraine",
+    "status": "pending",
+    "appliedAt": "2026-07-03T06:20:00Z"
+  },
+  {
+    "id": "lv-6",
+    "employeeId": "emp-9",
+    "type": "unpaid",
+    "startDate": "2026-06-02",
+    "endDate": "2026-06-06",
+    "days": 5,
+    "reason": "Extended travel",
+    "status": "rejected",
+    "appliedAt": "2026-05-20T12:00:00Z"
+  }
+]

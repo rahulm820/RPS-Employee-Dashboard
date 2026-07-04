@@ -1,0 +1,112 @@
+[
+  {
+    "id": "emp-1",
+    "name": "Rahul Madhawani",
+    "email": "rahulmadhawani2004@gmail.com",
+    "role": "Product Engineer",
+    "team": "Platform",
+    "status": "online",
+    "phone": "+91 98200 10001",
+    "location": "Mumbai, IN",
+    "joinedAt": "2023-02-13"
+  },
+  {
+    "id": "emp-2",
+    "name": "Aisha Verma",
+    "email": "aisha.verma@rps.example",
+    "role": "Product Designer",
+    "team": "Design",
+    "status": "online",
+    "phone": "+91 98200 10002",
+    "location": "Bengaluru, IN",
+    "joinedAt": "2022-08-01"
+  },
+  {
+    "id": "emp-3",
+    "name": "Rohan Mehta",
+    "email": "rohan.mehta@rps.example",
+    "role": "Senior Engineer",
+    "team": "Platform",
+    "status": "busy",
+    "phone": "+91 98200 10003",
+    "location": "Pune, IN",
+    "joinedAt": "2021-05-19"
+  },
+  {
+    "id": "emp-4",
+    "name": "Sara Khan",
+    "email": "sara.khan@rps.example",
+    "role": "Product Manager",
+    "team": "Growth",
+    "status": "online",
+    "phone": "+91 98200 10004",
+    "location": "Mumbai, IN",
+    "joinedAt": "2020-11-02"
+  },
+  {
+    "id": "emp-5",
+    "name": "Dev Patel",
+    "email": "dev.patel@rps.example",
+    "role": "Backend Engineer",
+    "team": "Platform",
+    "status": "offline",
+    "phone": "+91 98200 10005",
+    "location": "Ahmedabad, IN",
+    "joinedAt": "2023-07-24"
+  },
+  {
+    "id": "emp-6",
+    "name": "Neha Rao",
+    "email": "neha.rao@rps.example",
+    "role": "Data Analyst",
+    "team": "Insights",
+    "status": "away",
+    "phone": "+91 98200 10006",
+    "location": "Hyderabad, IN",
+    "joinedAt": "2022-01-10"
+  },
+  {
+    "id": "emp-7",
+    "name": "Kabir Singh",
+    "email": "kabir.singh@rps.example",
+    "role": "QA Engineer",
+    "team": "Platform",
+    "status": "online",
+    "phone": "+91 98200 10007",
+    "location": "Delhi, IN",
+    "joinedAt": "2024-03-04"
+  },
+  {
+    "id": "emp-8",
+    "name": "Priya Nair",
+    "email": "priya.nair@rps.example",
+    "role": "HR Partner",
+    "team": "People",
+    "status": "online",
+    "phone": "+91 98200 10008",
+    "location": "Kochi, IN",
+    "joinedAt": "2019-09-16"
+  },
+  {
+    "id": "emp-9",
+    "name": "Arjun Iyer",
+    "email": "arjun.iyer@rps.example",
+    "role": "Frontend Engineer",
+    "team": "Growth",
+    "status": "busy",
+    "phone": "+91 98200 10009",
+    "location": "Chennai, IN",
+    "joinedAt": "2023-10-30"
+  },
+  {
+    "id": "emp-10",
+    "name": "Meera Joshi",
+    "email": "meera.joshi@rps.example",
+    "role": "Visual Designer",
+    "team": "Design",
+    "status": "offline",
+    "phone": "+91 98200 10010",
+    "location": "Jaipur, IN",
+    "joinedAt": "2021-12-06"
+  }
+]

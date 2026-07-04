@@ -10,8 +10,12 @@ export const THEME_STORAGE_KEY = 'RPSE.theme'
 /** Sidebar collapsed-state key (desktop). */
 export const SIDEBAR_STORAGE_KEY = 'RPSE.sidebar-collapsed'
 
+/** Employee id of the signed-in user (matches an entry in data/employees.json). */
+export const CURRENT_USER_ID = 'emp-1'
+
 /** Mock signed-in user — replace with real auth/session data. */
 export const CURRENT_USER = {
+  id: CURRENT_USER_ID,
   name: 'Rahul Madhawani',
   role: 'Product Engineer',
   email: 'rahulmadhawani2004@gmail.com',

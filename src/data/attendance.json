@@ -1,0 +1,18 @@
+[
+  { "id": "att-1", "employeeId": "emp-1", "date": "2026-07-03", "clockIn": "09:02", "clockOut": "18:10", "status": "present" },
+  { "id": "att-2", "employeeId": "emp-2", "date": "2026-07-03", "clockIn": "08:55", "clockOut": "17:45", "status": "present" },
+  { "id": "att-3", "employeeId": "emp-3", "date": "2026-07-03", "clockIn": "09:41", "clockOut": "18:30", "status": "late" },
+  { "id": "att-4", "employeeId": "emp-4", "date": "2026-07-03", "clockIn": "09:05", "clockOut": "17:20", "status": "remote" },
+  { "id": "att-5", "employeeId": "emp-5", "date": "2026-07-03", "clockIn": null, "clockOut": null, "status": "absent" },
+  { "id": "att-6", "employeeId": "emp-6", "date": "2026-07-03", "clockIn": "09:12", "clockOut": "18:02", "status": "present" },
+  { "id": "att-7", "employeeId": "emp-7", "date": "2026-07-03", "clockIn": "09:33", "clockOut": "18:15", "status": "late" },
+  { "id": "att-8", "employeeId": "emp-8", "date": "2026-07-03", "clockIn": "08:48", "clockOut": "17:35", "status": "present" },
+  { "id": "att-9", "employeeId": "emp-9", "date": "2026-07-03", "clockIn": "09:20", "clockOut": null, "status": "remote" },
+  { "id": "att-10", "employeeId": "emp-10", "date": "2026-07-03", "clockIn": "09:08", "clockOut": "17:55", "status": "present" },
+
+  { "id": "att-11", "employeeId": "emp-1", "date": "2026-07-02", "clockIn": "09:00", "clockOut": "18:05", "status": "present" },
+  { "id": "att-12", "employeeId": "emp-2", "date": "2026-07-02", "clockIn": "09:15", "clockOut": "17:50", "status": "late" },
+  { "id": "att-13", "employeeId": "emp-3", "date": "2026-07-02", "clockIn": "08:58", "clockOut": "18:20", "status": "present" },
+  { "id": "att-14", "employeeId": "emp-4", "date": "2026-07-02", "clockIn": "09:04", "clockOut": "17:10", "status": "remote" },
+  { "id": "att-15", "employeeId": "emp-5", "date": "2026-07-02", "clockIn": "09:07", "clockOut": "18:00", "status": "present" }
+]

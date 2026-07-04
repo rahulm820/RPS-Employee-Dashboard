@@ -1,7 +1,7 @@
 import { useMatches } from 'react-router-dom'
 import { cx } from '../ui/utils'
 import { Avatar } from '../ui'
-import { useTheme } from '../../theme/ThemeProvider'
+import { useTheme } from '../../theme/useTheme'
 import { MenuIcon, SearchIcon, BellIcon, SunIcon, MoonIcon } from '../icons'
 import { APP_NAME, CURRENT_USER } from '../../constants/app'
 import styles from './Topbar.module.css'

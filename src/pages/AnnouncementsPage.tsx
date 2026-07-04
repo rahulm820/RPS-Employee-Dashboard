@@ -1,36 +1,73 @@
 import { PageHeader } from '../components/layout/PageHeader'
-import { Card, Badge } from '../components/ui'
+import { Card, Badge, Skeleton, ErrorState, EmptyState } from '../components/ui'
+import { useAnnouncements } from '../hooks/useAnnouncements'
+import { relativeTime } from '../utils/date'
+import { titleCase } from '../utils/format'
+import type { AnnouncementCategory } from '../types'
 import styles from './pages.module.css'
 
-const ITEMS = [
-  { id: '1', title: 'Q3 town hall on Friday', body: 'Join the company all-hands at 4pm in the main hall or via the live stream. Bring your questions for the leadership Q&A.', meta: '2 hours ago', tag: 'Event', variant: 'accent' as const },
-  { id: '2', title: 'Updated leave policy', body: 'The annual carry-over cap has been raised to 10 days, effective this quarter. See the handbook for details.', meta: 'Yesterday', tag: 'Policy', variant: 'info' as const },
-  { id: '3', title: 'Office closed July 15', body: 'The office will be closed for the public holiday. Enjoy the long weekend!', meta: '3 days ago', tag: 'Notice', variant: 'warning' as const },
-]
+const CATEGORY_VARIANT: Record<AnnouncementCategory, 'accent' | 'info' | 'warning' | 'neutral'> = {
+  event: 'accent',
+  policy: 'info',
+  notice: 'warning',
+  general: 'neutral',
+}
 
 export default function AnnouncementsPage() {
+  const { data, loading, error, refetch } = useAnnouncements()
+
   return (
     <>
       <PageHeader
         title="Announcements"
         description="Company-wide updates, events, and policy changes."
       />
-      <div className={styles.stack}>
-        {ITEMS.map((a) => (
-          <Card key={a.id}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)', marginBottom: 6 }}>
-              <Badge variant={a.variant} size="sm">
-                {a.tag}
-              </Badge>
-              <span className={styles.feedMeta}>{a.meta}</span>
-            </div>
-            <p className={styles.feedTitle}>{a.title}</p>
-            <p className={styles.feedBody} style={{ marginTop: 4 }}>
-              {a.body}
-            </p>
-          </Card>
-        ))}
-      </div>
+
+      {error && <ErrorState description="Couldn't load announcements." onRetry={refetch} />}
+
+      {loading && (
+        <div className={styles.stack}>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i}>
+              <Skeleton width="30%" />
+              <div style={{ height: 10 }} />
+              <Skeleton variant="text" lines={2} />
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {data && data.length === 0 && (
+        <Card>
+          <EmptyState title="No announcements" description="There's nothing to share right now." />
+        </Card>
+      )}
+
+      {data && data.length > 0 && (
+        <div className={styles.stack}>
+          {data.map((a) => (
+            <Card key={a.id}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)', marginBottom: 6 }}>
+                <Badge variant={CATEGORY_VARIANT[a.category]} size="sm">
+                  {titleCase(a.category)}
+                </Badge>
+                {a.pinned && (
+                  <Badge variant="neutral" size="sm">
+                    Pinned
+                  </Badge>
+                )}
+                <span className={styles.feedMeta}>
+                  {a.authorName} · {relativeTime(a.createdAt)}
+                </span>
+              </div>
+              <p className={styles.feedTitle}>{a.title}</p>
+              <p className={styles.feedBody} style={{ marginTop: 4 }}>
+                {a.body}
+              </p>
+            </Card>
+          ))}
+        </div>
+      )}
     </>
   )
 }

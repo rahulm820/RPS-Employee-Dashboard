@@ -1,0 +1,35 @@
+[
+  {
+    "id": "ann-1",
+    "title": "Q3 town hall on Friday",
+    "body": "Join the company all-hands at 4:00 PM in the main hall or via the live stream. Bring your questions for the leadership Q&A session.",
+    "category": "event",
+    "authorId": "emp-8",
+    "createdAt": "2026-07-04T08:30:00Z",
+    "pinned": true
+  },
+  {
+    "id": "ann-2",
+    "title": "Updated leave policy",
+    "body": "The annual carry-over cap has been raised to 10 days, effective this quarter. Please review the updated handbook for full details.",
+    "category": "policy",
+    "authorId": "emp-8",
+    "createdAt": "2026-07-03T11:00:00Z"
+  },
+  {
+    "id": "ann-3",
+    "title": "Office closed on July 15",
+    "body": "The office will remain closed for the public holiday. Enjoy the long weekend and stay safe!",
+    "category": "notice",
+    "authorId": "emp-8",
+    "createdAt": "2026-07-01T09:15:00Z"
+  },
+  {
+    "id": "ann-4",
+    "title": "New hires joining the Platform team",
+    "body": "Please welcome two new engineers joining Platform this week. Say hello on the team channel and help them settle in.",
+    "category": "general",
+    "authorId": "emp-4",
+    "createdAt": "2026-06-29T14:40:00Z"
+  }
+]

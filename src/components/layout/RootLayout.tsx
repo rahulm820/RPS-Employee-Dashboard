@@ -1,21 +1,15 @@
-import { useEffect, useState } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
 import styles from './RootLayout.module.css'
 
 /**
  * App shell: persistent sidebar + topbar wrapping the routed page outlet.
- * Manages the mobile drawer open state and closes it on navigation.
+ * Owns the mobile drawer state; the sidebar's nav links and backdrop close it.
  */
 export function RootLayout() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const location = useLocation()
-
-  // Close the mobile drawer whenever the route changes.
-  useEffect(() => {
-    setMenuOpen(false)
-  }, [location.pathname])
 
   return (
     <div className={styles.shell}>

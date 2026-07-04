@@ -1,70 +1,60 @@
 import { PageHeader } from '../components/layout/PageHeader'
-import { Button, Card, Badge, Avatar, Table, type Column } from '../components/ui'
+import { Button, Card, Badge, Avatar, Table, Skeleton, ErrorState, type Column } from '../components/ui'
+import { useDashboardStats } from '../hooks/useDashboardStats'
+import { useDailyAttendance } from '../hooks/useAttendance'
+import { useRecentAnnouncements } from '../hooks/useAnnouncements'
 import { CURRENT_USER } from '../constants/app'
+import { formatPercent, pluralize } from '../utils/format'
+import { formatClock, formatDate, relativeTime } from '../utils/date'
+import type { AttendanceRecordView, AttendanceStatus } from '../types'
 import styles from './pages.module.css'
 
-interface AttendanceRow {
-  id: string
-  name: string
-  role: string
-  clockIn: string
-  status: 'Present' | 'Late' | 'Remote' | 'Absent'
+const STATUS_VARIANT: Record<AttendanceStatus, 'success' | 'warning' | 'accent' | 'danger'> = {
+  present: 'success',
+  late: 'warning',
+  remote: 'accent',
+  absent: 'danger',
 }
 
-const STATS = [
-  { label: 'Attendance today', value: '94%', meta: '47 of 50 present' },
-  { label: 'Leave balance', value: '12', meta: 'days remaining' },
-  { label: 'Pending requests', value: '3', meta: 'awaiting your approval' },
-  { label: 'Team headcount', value: '50', meta: '+2 this month' },
-]
-
-const STATUS_VARIANT: Record<AttendanceRow['status'], 'success' | 'warning' | 'accent' | 'danger'> = {
-  Present: 'success',
-  Late: 'warning',
-  Remote: 'accent',
-  Absent: 'danger',
-}
-
-const ROWS: AttendanceRow[] = [
-  { id: '1', name: 'Aisha Verma', role: 'Designer', clockIn: '09:02', status: 'Present' },
-  { id: '2', name: 'Rohan Mehta', role: 'Engineer', clockIn: '09:41', status: 'Late' },
-  { id: '3', name: 'Sara Khan', role: 'PM', clockIn: '08:55', status: 'Remote' },
-  { id: '4', name: 'Dev Patel', role: 'Engineer', clockIn: '—', status: 'Absent' },
-  { id: '5', name: 'Neha Rao', role: 'Analyst', clockIn: '09:10', status: 'Present' },
-]
-
-const columns: Column<AttendanceRow>[] = [
+const columns: Column<AttendanceRecordView>[] = [
   {
     key: 'name',
     header: 'Employee',
     render: (r) => (
       <span className={styles.cellUser}>
-        <Avatar name={r.name} size="xs" />
-        <span>{r.name}</span>
+        <Avatar name={r.employee?.name} size="xs" />
+        <span>{r.employee?.name ?? 'Unknown'}</span>
       </span>
     ),
   },
-  { key: 'role', header: 'Role' },
-  { key: 'clockIn', header: 'Clock in', align: 'center' },
+  { key: 'team', header: 'Team', render: (r) => r.employee?.team ?? '—' },
+  { key: 'clockIn', header: 'Clock in', align: 'center', render: (r) => formatClock(r.clockIn) },
   {
     key: 'status',
     header: 'Status',
     align: 'right',
     render: (r) => (
       <Badge variant={STATUS_VARIANT[r.status]} dot>
-        {r.status}
+        {r.status[0].toUpperCase() + r.status.slice(1)}
       </Badge>
     ),
   },
 ]
 
-const ANNOUNCEMENTS = [
-  { id: 'a', title: 'Q3 town hall on Friday', body: 'Join the all-hands at 4pm in the main hall or via the stream.', meta: '2h ago' },
-  { id: 'b', title: 'New leave policy', body: 'Carry-over cap increased to 10 days effective this quarter.', meta: 'Yesterday' },
-  { id: 'c', title: 'Office closed July 15', body: 'Public holiday — enjoy the long weekend.', meta: '3 days ago' },
-]
-
 export default function DashboardPage() {
+  const stats = useDashboardStats()
+  const attendance = useDailyAttendance()
+  const announcements = useRecentAnnouncements(3)
+
+  const statCards = stats.data
+    ? [
+        { label: 'Attendance today', value: formatPercent(stats.data.attendanceRate), meta: `${stats.data.present} of ${stats.data.headcount} present` },
+        { label: 'Leave balance', value: String(stats.data.leaveRemaining), meta: 'days remaining' },
+        { label: 'Pending requests', value: String(stats.data.pendingRequests), meta: 'awaiting approval' },
+        { label: 'Team headcount', value: String(stats.data.headcount), meta: 'across all teams' },
+      ]
+    : []
+
   return (
     <>
       <PageHeader
@@ -75,7 +65,20 @@ export default function DashboardPage() {
 
       <div className={styles.stack}>
         <div className={`${styles.grid} ${styles.stats}`}>
-          {STATS.map((s) => (
+          {stats.loading &&
+            Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i}>
+                <Skeleton width="55%" height="0.75rem" />
+                <div style={{ height: 12 }} />
+                <Skeleton width="40%" height="2rem" />
+              </Card>
+            ))}
+          {stats.error && (
+            <Card>
+              <ErrorState size="sm" description="Couldn't load stats." onRetry={stats.refetch} />
+            </Card>
+          )}
+          {statCards.map((s) => (
             <Card key={s.label}>
               <p className={styles.statLabel}>{s.label}</p>
               <p className={styles.statValue}>{s.value}</p>
@@ -87,23 +90,51 @@ export default function DashboardPage() {
         <div className={`${styles.grid} ${styles.twoCol}`}>
           <Card
             padding="none"
-            header={<span className={styles.sectionTitle}>Today's attendance</span>}
+            header={
+              <span className={styles.sectionTitle}>
+                Attendance{attendance.data ? ` · ${formatDate(attendance.data.date)}` : ''}
+              </span>
+            }
           >
-            <Table columns={columns} data={ROWS} rowKey={(r) => r.id} hoverable />
+            {attendance.error ? (
+              <div style={{ padding: 'var(--space-md)' }}>
+                <ErrorState size="sm" description="Couldn't load attendance." onRetry={attendance.refetch} />
+              </div>
+            ) : (
+              <Table
+                columns={columns}
+                data={attendance.data?.records ?? []}
+                rowKey={(r) => r.id}
+                loading={attendance.loading}
+                hoverable
+              />
+            )}
           </Card>
 
           <Card header={<span className={styles.sectionTitle}>Announcements</span>}>
-            <div className={styles.feed}>
-              {ANNOUNCEMENTS.map((a) => (
-                <div key={a.id} className={styles.feedItem}>
-                  <p className={styles.feedTitle}>{a.title}</p>
-                  <p className={styles.feedBody}>{a.body}</p>
-                  <span className={styles.feedMeta}>{a.meta}</span>
-                </div>
-              ))}
-            </div>
+            {announcements.loading && <Skeleton variant="text" lines={5} />}
+            {announcements.error && (
+              <ErrorState size="sm" description="Couldn't load announcements." onRetry={announcements.refetch} />
+            )}
+            {announcements.data && (
+              <div className={styles.feed}>
+                {announcements.data.map((a) => (
+                  <div key={a.id} className={styles.feedItem}>
+                    <p className={styles.feedTitle}>{a.title}</p>
+                    <p className={styles.feedBody}>{a.body}</p>
+                    <span className={styles.feedMeta}>
+                      {a.authorName} · {relativeTime(a.createdAt)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </Card>
         </div>
+
+        <p className={styles.statMeta} style={{ textAlign: 'center' }}>
+          {attendance.data ? pluralize(attendance.data.records.length, 'record') : ''}
+        </p>
       </div>
     </>
   )
