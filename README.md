@@ -8,6 +8,8 @@ The app runs entirely on the client against local mock data behind a service
 layer, so no backend is required. The one external dependency is Google Gemini,
 used for the AI summary (and it degrades gracefully when no key is set).
 
+**Live demo:** <https://rps-employee-dashboard-ashy.vercel.app/>
+
 ---
 
 ## Features
@@ -46,6 +48,8 @@ used for the AI summary (and it degrades gracefully when no key is set).
 ### Install
 
 ```bash
+git clone https://github.com/rahulm820/rps-employee-dashboard.git
+cd rps-employee-dashboard/my-app
 npm install
 ```
 
@@ -64,9 +68,6 @@ configured" state. Get a key at <https://aistudio.google.com/apikey>.
 ```bash
 npm run dev        # start the dev server (http://localhost:5173)
 npm run build      # type-check + production build
-npm run preview    # preview the production build
-npm run lint       # run ESLint
-npm run typecheck  # type-check only
 ```
 
 ---
