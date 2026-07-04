@@ -1,10 +1,11 @@
 import { request } from '../lib/api'
-import { attendance, employees } from '../data'
+import { attendance, personalAttendance, employees } from '../data'
 import type {
   AttendanceRecord,
   AttendanceRecordView,
   AttendanceSummary,
   DailyAttendance,
+  MonthlyAttendance,
 } from '../types'
 
 function employeeMap() {
@@ -51,4 +52,38 @@ export function getAttendanceDates(signal?: AbortSignal): Promise<string[]> {
     () => [...new Set(attendance.map((r) => r.date))].sort((a, b) => b.localeCompare(a)),
     { signal },
   )
+}
+
+function pad(n: number): string {
+  return String(n).padStart(2, '0')
+}
+
+/** The current user's attendance for a given month (records + summary). */
+export function getMyMonthlyAttendance(
+  year: number,
+  month: number,
+  signal?: AbortSignal,
+): Promise<MonthlyAttendance> {
+  return request(() => {
+    const prefix = `${year}-${pad(month)}`
+    const records = personalAttendance
+      .filter((r) => r.date.startsWith(prefix))
+      .sort((a, b) => a.date.localeCompare(b.date))
+    return { year, month, records, summary: summarize(records) }
+  }, { signal })
+}
+
+/**
+ * The month to open the attendance view on: the most recent month that has
+ * personal records (falls back to the current month). Synchronous — this is a
+ * UI default, not a fetched resource.
+ */
+export function getDefaultAttendanceMonth(): { year: number; month: number } {
+  const latest = personalAttendance.reduce((max, r) => (r.date > max ? r.date : max), '')
+  if (!latest) {
+    const now = new Date()
+    return { year: now.getFullYear(), month: now.getMonth() + 1 }
+  }
+  const [y, m] = latest.split('-')
+  return { year: Number(y), month: Number(m) }
 }

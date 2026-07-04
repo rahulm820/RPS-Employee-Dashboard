@@ -80,6 +80,22 @@ export function ProfileIcon(props: IconProps) {
   )
 }
 
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M14 6l-6 6 6 6" />
+    </Svg>
+  )
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M10 6l6 6-6 6" />
+    </Svg>
+  )
+}
+
 export function MenuIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -137,6 +153,24 @@ export function LogoIcon(props: IconProps) {
       <rect x="2.5" y="2.5" width="19" height="19" rx="5" />
       <path d="M8 15c1-5 3-7 8-8-1 5-3 7-8 8Z" />
       <path d="M8 15c2-1 3.5-2.5 4.5-4.5" />
+    </Svg>
+  )
+}
+
+export function ClockIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7.5V12l3 2" />
+    </Svg>
+  )
+}
+
+export function CheckCircleIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8.5 12l2.3 2.3L15.5 9.5" />
     </Svg>
   )
 }

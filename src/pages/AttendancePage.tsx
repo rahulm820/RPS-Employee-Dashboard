@@ -1,105 +1,78 @@
 import { useState } from 'react'
 import { PageHeader } from '../components/layout/PageHeader'
-import { Card, Badge, Avatar, Table, DatePicker, ErrorState, type Column } from '../components/ui'
-import { useAttendanceByDate } from '../hooks/useAttendance'
-import { formatClock, formatPercent } from '../utils'
-import type { AttendanceRecordView, AttendanceStatus } from '../types'
-import styles from './pages.module.css'
-
-const STATUS_VARIANT: Record<AttendanceStatus, 'success' | 'warning' | 'accent' | 'danger'> = {
-  present: 'success',
-  late: 'warning',
-  remote: 'accent',
-  absent: 'danger',
-}
-
-const columns: Column<AttendanceRecordView>[] = [
-  {
-    key: 'name',
-    header: 'Employee',
-    render: (r) => (
-      <span className={styles.cellUser}>
-        <Avatar name={r.employee?.name} size="xs" />
-        <span>{r.employee?.name ?? 'Unknown'}</span>
-      </span>
-    ),
-  },
-  { key: 'team', header: 'Team', render: (r) => r.employee?.team ?? '—' },
-  { key: 'clockIn', header: 'Clock in', align: 'center', render: (r) => formatClock(r.clockIn) },
-  { key: 'clockOut', header: 'Clock out', align: 'center', render: (r) => formatClock(r.clockOut) },
-  {
-    key: 'status',
-    header: 'Status',
-    align: 'right',
-    render: (r) => (
-      <Badge variant={STATUS_VARIANT[r.status]} dot>
-        {r.status[0].toUpperCase() + r.status.slice(1)}
-      </Badge>
-    ),
-  },
-]
+import { Button, useToast } from '../components/ui'
+import {
+  AttendanceToolbar,
+  AttendanceStats,
+  AttendanceCalendar,
+  AttendanceTable,
+} from '../components/attendance'
+import { useMyMonthlyAttendance } from '../hooks/useAttendance'
+import { attendanceService } from '../services'
+import { monthLabel } from '../utils'
+import styles from '../components/attendance/attendance.module.css'
 
 export default function AttendancePage() {
-  const [date, setDate] = useState('2026-07-03')
-  const { data, loading, error, refetch } = useAttendanceByDate(date)
+  const { info } = useToast()
+  const [{ year, month }, setMonth] = useState(() =>
+    attendanceService.getDefaultAttendanceMonth(),
+  )
 
-  const summary = data?.summary
+  const { data, loading, error, refetch } = useMyMonthlyAttendance(year, month)
+
+  function shift(delta: number) {
+    setMonth(({ year: y, month: m }) => {
+      const next = new Date(y, m - 1 + delta, 1)
+      return { year: next.getFullYear(), month: next.getMonth() + 1 }
+    })
+  }
+
+  function goToday() {
+    const now = new Date()
+    setMonth({ year: now.getFullYear(), month: now.getMonth() + 1 })
+  }
 
   return (
     <>
       <PageHeader
         title="Attendance"
-        description="Review the daily attendance log for your team."
+        description="Your monthly attendance record — statistics, calendar, and daily log."
         actions={
-          <div style={{ width: 200 }}>
-            <DatePicker
-              aria-label="Select date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          </div>
+          <Button variant="secondary" onClick={() => info('Export started', 'Your attendance export will download shortly.')}>
+            Export
+          </Button>
         }
       />
 
-      {summary && (
-        <div className={`${styles.grid} ${styles.stats}`} style={{ marginBottom: 'var(--space-md)' }}>
-          <Card>
-            <p className={styles.statLabel}>Attendance rate</p>
-            <p className={styles.statValue}>{formatPercent(summary.rate)}</p>
-          </Card>
-          <Card>
-            <p className={styles.statLabel}>Present</p>
-            <p className={styles.statValue}>{summary.present}</p>
-          </Card>
-          <Card>
-            <p className={styles.statLabel}>Late</p>
-            <p className={styles.statValue}>{summary.late}</p>
-          </Card>
-          <Card>
-            <p className={styles.statLabel}>Absent</p>
-            <p className={styles.statValue}>{summary.absent}</p>
-          </Card>
-        </div>
-      )}
+      <div className={styles.bar}>
+        <AttendanceToolbar
+          year={year}
+          month={month}
+          onPrev={() => shift(-1)}
+          onNext={() => shift(1)}
+          onToday={goToday}
+        />
+      </div>
 
-      <Card padding="none">
-        {error ? (
-          <div style={{ padding: 'var(--space-md)' }}>
-            <ErrorState description="Couldn't load attendance." onRetry={refetch} />
-          </div>
-        ) : (
-          <Table
-            columns={columns}
-            data={data?.records ?? []}
-            rowKey={(r) => r.id}
-            loading={loading}
-            empty={
-              <span className={styles.feedMeta}>No attendance records for this date.</span>
-            }
-            hoverable
-          />
-        )}
-      </Card>
+      <div className={styles.stack}>
+        <AttendanceStats
+          summary={data?.summary}
+          loading={loading}
+          error={error}
+          onRetry={refetch}
+        />
+        <AttendanceCalendar
+          year={year}
+          month={month}
+          records={data?.records ?? []}
+          loading={loading}
+        />
+        <AttendanceTable
+          records={data?.records ?? []}
+          loading={loading}
+          monthName={monthLabel(year, month)}
+        />
+      </div>
     </>
   )
 }

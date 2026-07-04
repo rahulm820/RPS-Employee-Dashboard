@@ -32,3 +32,12 @@ export interface DailyAttendance {
   records: AttendanceRecordView[]
   summary: AttendanceSummary
 }
+
+export interface MonthlyAttendance {
+  /** Four-digit year. */
+  year: number
+  /** 1–12. */
+  month: number
+  records: AttendanceRecord[]
+  summary: AttendanceSummary
+}

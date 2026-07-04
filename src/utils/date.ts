@@ -49,6 +49,23 @@ export function isToday(iso: ISODate | ISODateTime): boolean {
   return new Date(iso).toISOString().slice(0, 10) === todayISO()
 }
 
+/** Full month label, e.g. "June 2026". `month` is 1–12. */
+export function monthLabel(year: number, month: number): string {
+  return new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric' }).format(
+    new Date(year, month - 1, 1),
+  )
+}
+
+/** Worked duration between two clock times, e.g. "9h 03m" (or "—"). */
+export function workedHours(clockIn: ClockTime | null, clockOut: ClockTime | null): string {
+  if (!clockIn || !clockOut) return '—'
+  const [h1, m1] = clockIn.split(':').map(Number)
+  const [h2, m2] = clockOut.split(':').map(Number)
+  const mins = h2 * 60 + m2 - (h1 * 60 + m1)
+  if (Number.isNaN(mins) || mins < 0) return '—'
+  return `${Math.floor(mins / 60)}h ${String(mins % 60).padStart(2, '0')}m`
+}
+
 /** Human "time ago" string, e.g. "3 hours ago", "2 days ago". */
 export function relativeTime(iso: ISODateTime, now: Date = new Date()): string {
   const then = new Date(iso).getTime()

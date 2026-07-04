@@ -5,6 +5,7 @@
  */
 import employeesJson from './employees.json'
 import attendanceJson from './attendance.json'
+import personalAttendanceJson from './personal-attendance.json'
 import leavesJson from './leaves.json'
 import leaveBalancesJson from './leave-balances.json'
 import announcementsJson from './announcements.json'
@@ -18,6 +19,7 @@ import type {
 
 export const employees = employeesJson as unknown as Employee[]
 export const attendance = attendanceJson as unknown as AttendanceRecord[]
+export const personalAttendance = personalAttendanceJson as unknown as AttendanceRecord[]
 export const leaves = leavesJson as unknown as LeaveRequest[]
 export const leaveBalances = leaveBalancesJson as unknown as LeaveBalance[]
 export const announcements = announcementsJson as unknown as Announcement[]
