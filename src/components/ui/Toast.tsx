@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -57,14 +58,17 @@ export function ToastProvider({
     [toast],
   )
 
-  const value: ToastContextValue = {
-    toast,
-    dismiss,
-    success: helper('success'),
-    error: helper('danger'),
-    info: helper('info'),
-    warning: helper('warning'),
-  }
+  const value = useMemo<ToastContextValue>(
+    () => ({
+      toast,
+      dismiss,
+      success: helper('success'),
+      error: helper('danger'),
+      info: helper('info'),
+      warning: helper('warning'),
+    }),
+    [toast, dismiss, helper],
+  )
 
   return (
     <ToastContext.Provider value={value}>

@@ -1,9 +1,12 @@
-import { useMatches } from 'react-router-dom'
+import { useState } from 'react'
+import { useMatches, useNavigate } from 'react-router-dom'
 import { cx } from '../ui/utils'
 import { Avatar } from '../ui'
 import { useTheme } from '../../theme/useTheme'
 import { MenuIcon, SearchIcon, BellIcon, SunIcon, MoonIcon } from '../icons'
 import { APP_NAME, CURRENT_USER } from '../../constants/app'
+import { ROUTES } from '../../routes/paths'
+import { useCurrentUser } from '../../context/currentUserContext'
 import styles from './Topbar.module.css'
 
 interface RouteHandle {
@@ -16,13 +19,22 @@ export interface TopbarProps {
 
 export function Topbar({ onMenuClick }: TopbarProps) {
   const { theme, toggleTheme } = useTheme()
+  const { user } = useCurrentUser()
   const matches = useMatches()
+  const navigate = useNavigate()
+  const [query, setQuery] = useState('')
 
   const title =
     [...matches]
       .reverse()
       .map((m) => (m.handle as RouteHandle | undefined)?.title)
       .find(Boolean) ?? APP_NAME
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault()
+    const q = query.trim()
+    navigate(q ? `${ROUTES.directory}?q=${encodeURIComponent(q)}` : ROUTES.directory)
+  }
 
   return (
     <header className={styles.topbar}>
@@ -37,15 +49,17 @@ export function Topbar({ onMenuClick }: TopbarProps) {
 
       <h1 className={styles.title}>{title}</h1>
 
-      <div className={styles.search}>
+      <form className={styles.search} onSubmit={handleSearch} role="search">
         <SearchIcon className={styles.searchIcon} />
         <input
           className={styles.searchInput}
           type="search"
-          placeholder="Search people, requests…"
-          aria-label="Search"
+          placeholder="Search people…"
+          aria-label="Search people"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
-      </div>
+      </form>
 
       <div className={styles.actions}>
         <button
@@ -61,13 +75,23 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         <button
           type="button"
           className={cx(styles.iconButton, styles.hasBadge)}
-          aria-label="Notifications"
+          onClick={() => navigate(ROUTES.announcements)}
+          aria-label="Announcements"
+          title="Announcements"
         >
           <BellIcon />
           <span className={styles.dot} aria-hidden="true" />
         </button>
 
-        <Avatar name={CURRENT_USER.name} size="sm" status="online" />
+        <button
+          type="button"
+          className={styles.avatarButton}
+          onClick={() => navigate(ROUTES.profile)}
+          aria-label="Your profile"
+          title="Your profile"
+        >
+          <Avatar name={user?.name ?? CURRENT_USER.name} size="sm" status={user?.status ?? 'online'} />
+        </button>
       </div>
     </header>
   )

@@ -24,6 +24,23 @@
   gap: var(--space-md);
 }
 
+/* Form layout helpers */
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+@media (max-width: 560px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
+
 /* Stat card content */
 .statLabel {
   margin: 0;

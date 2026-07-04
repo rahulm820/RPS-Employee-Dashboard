@@ -1,75 +1,151 @@
-# React + TypeScript + Vite
+# RPS Employee Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An internal employee dashboard — attendance, leave, team directory, and
+announcements — with an AI-powered announcement summary. Built with React,
+TypeScript, and Vite.
 
-Currently, two official plugins are available:
+The app runs entirely on the client against local mock data behind a service
+layer, so no backend is required. The one external dependency is Google Gemini,
+used for the AI summary (and it degrades gracefully when no key is set).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Dashboard** — KPI cards, an attendance summary (proportion bar + legend), a
+  leave summary (usage bars), recent announcements, and quick actions.
+- **Attendance** — personal monthly view with statistics, a calendar grid, and a
+  daily log table; navigate month to month.
+- **Leave** — request form with validation, balance summary, and filterable
+  history with status badges. Balances are derived from approved requests.
+- **Team directory** — searchable, filterable (team + status) responsive grid of
+  employee cards, each with a one-click **Connect** intro email.
+- **Announcements** — AI summary (Google Gemini) with loading/retry states, plus
+  the full announcement feed.
+- **Profile** — editable details with a save confirmation toast.
+- **Theming** — light/dark mode, persisted, with a topbar toggle.
+- **UX** — responsive app shell (sidebar + topbar, mobile drawer), reusable UI
+  kit, skeleton loading, and empty/error states throughout.
 
-## Expanding the ESLint configuration
+## Tech stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React 19** + **TypeScript** (strict) + **Vite**
+- **React Router 7** (data router, code-split routes)
+- **CSS Modules** with a CSS-variable design-token system (light/dark)
+- **ESLint** (typescript-eslint, react-hooks, react-refresh)
+- **Google Gemini** REST API for the AI summary
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Getting started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
 
+- Node.js 20.19+ (or 22.12+) and npm
+
+### Install
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Configure environment (optional — enables the AI summary)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+cp .env.example .env
+# then edit .env and add your Gemini API key(s)
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Without a key the app still runs; the AI summary card shows an "AI not
+configured" state. Get a key at <https://aistudio.google.com/apikey>.
+
+### Run
+
+```bash
+npm run dev        # start the dev server (http://localhost:5173)
+npm run build      # type-check + production build
+npm run preview    # preview the production build
+npm run lint       # run ESLint
+npm run typecheck  # type-check only
+```
+
+---
+
+## Environment variables
+
+All variables are optional and read at build/dev time via Vite (`import.meta.env`).
+Because this is a client-only app, any `VITE_`-prefixed value is bundled and
+visible in the browser — fine for a demo, but a production app should proxy AI
+calls through a backend.
+
+| Variable                | Required | Default            | Description                                           |
+| ----------------------- | -------- | ------------------ | ----------------------------------------------------- |
+| `VITE_GEMINI_API_KEY`   | No       | —                  | Primary Google Gemini API key for the AI summary.     |
+| `VITE_GEMINI_API_KEY_2` | No       | —                  | Optional fallback key, used if the primary key fails. |
+| `VITE_GEMINI_MODEL`     | No       | `gemini-2.0-flash` | Gemini model id.                                      |
+
+`.env` files are git-ignored; `.env.example` documents the expected keys.
+
+---
+
+## Project structure
 
 ```
+src/
+├─ main.tsx               # entry: tokens + global CSS, mounts <App/>
+├─ App.tsx                # ThemeProvider → ToastProvider → RouterProvider
+├─ routes/                # route config, paths, code-split page modules
+├─ pages/                 # one component per route (composed from features)
+├─ components/
+│  ├─ ui/                 # reusable UI kit (Button, Card, Table, Modal, …) + tokens
+│  ├─ layout/             # app shell: RootLayout, Sidebar, Topbar, PageHeader
+│  ├─ dashboard/          # dashboard widgets (KPIs, summaries, quick actions)
+│  ├─ attendance/         # attendance stats, calendar, table, toolbar
+│  ├─ leave/              # request form, balances, history, status badge
+│  ├─ directory/          # employee grid, card, toolbar
+│  ├─ announcements/      # announcement card, AI summary
+│  └─ icons.tsx           # inline SVG icon set
+├─ hooks/                 # data hooks (useAsync + per-resource hooks)
+├─ services/              # domain services over the mock API (+ aiService)
+├─ lib/api/               # mock request client (latency, abort, typed errors)
+├─ data/                  # mock JSON fixtures + typed loader
+├─ types/                 # domain models and shared types
+├─ theme/                 # ThemeProvider + useTheme
+├─ constants/             # app constants, navigation config
+├─ utils/                 # date & formatting helpers
+└─ styles/                # global base styles
+```
+
+## Architecture
+
+**Data flow.** UI components call **hooks**, which wrap **services**, which read
+from **mock JSON** through a small **mock API client** (`lib/api`). The client
+simulates latency, supports `AbortSignal`, deep-clones responses, and throws
+typed errors — so swapping it for real `fetch` calls wouldn't touch the layers
+above it.
+
+**Async state.** `useAsync` runs an abortable factory on mount and when its deps
+change, exposing `{ data, loading, error, refetch }` with derived loading. Every
+data-driven view has loading skeletons and error/empty states.
+
+**Theming.** Design tokens live in `components/ui/tokens.css` as CSS variables
+keyed off `data-theme` on `<html>`; `ThemeProvider` sets and persists the theme.
+
+**Performance.** Routes are code-split (`React.lazy`) so each page loads its own
+chunk; list cards are `React.memo`'d, and hot derived values are memoized.
+
+## AI feature (Gemini)
+
+`services/aiService.ts` wraps the Gemini `generateContent` REST endpoint. It
+builds a concise summarization prompt from the current announcements, supports
+cancellation, and returns typed `AiError`s. Multiple keys are tried in order
+(primary → fallback) so a rate-limited key transparently falls back to the next;
+aborts are never retried. The `AiSummary` component surfaces loading, error/retry,
+and "not configured" states.
+
+## Notes & limitations
+
+- Data is mock and in-memory: created leave requests persist for the session only.
+- The Gemini key is client-side (see Environment variables). Proxy through a
+  backend for production.
+- Dates in the mock fixtures are set around July 2026 so the demo looks populated.

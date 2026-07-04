@@ -1,10 +1,16 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { PageHeader } from '../components/layout/PageHeader'
 import { DirectoryToolbar, EmployeeGrid, type StatusFilter } from '../components/directory'
 import { useEmployees, useTeams } from '../hooks/useEmployees'
 
 export default function DirectoryPage() {
-  const [search, setSearch] = useState('')
+  // Search term lives in the URL (?q=) so the topbar search can deep-link here.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const search = searchParams.get('q') ?? ''
+  const setSearch = (value: string) =>
+    setSearchParams(value ? { q: value } : {}, { replace: true })
+
   const [team, setTeam] = useState('all')
   const [status, setStatus] = useState<StatusFilter>('all')
 
@@ -12,8 +18,12 @@ export default function DirectoryPage() {
   const teams = useTeams()
 
   // Search is applied by the service; team/status are refined client-side.
-  const filtered = (data ?? []).filter(
-    (e) => (team === 'all' || e.team === team) && (status === 'all' || e.status === status),
+  const filtered = useMemo(
+    () =>
+      (data ?? []).filter(
+        (e) => (team === 'all' || e.team === team) && (status === 'all' || e.status === status),
+      ),
+    [data, team, status],
   )
 
   const filtersActive = search.trim() !== '' || team !== 'all' || status !== 'all'

@@ -15,13 +15,6 @@ export function formatDate(
   return new Intl.DateTimeFormat('en-GB', options).format(d)
 }
 
-/** Format an ISO datetime's time portion, e.g. "2:30 PM". */
-export function formatTime(iso: ISODateTime): string {
-  const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return String(iso)
-  return new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(d)
-}
-
 /** Format a "HH:mm" clock string as "9:02 AM" (returns "—" for null). */
 export function formatClock(time: ClockTime | null): string {
   if (!time) return '—'
@@ -43,10 +36,6 @@ export function daysInclusive(start: ISODate, end: ISODate): number {
   const ms = new Date(end).getTime() - new Date(start).getTime()
   if (Number.isNaN(ms)) return 0
   return Math.floor(ms / 86_400_000) + 1
-}
-
-export function isToday(iso: ISODate | ISODateTime): boolean {
-  return new Date(iso).toISOString().slice(0, 10) === todayISO()
 }
 
 /** Full month label, e.g. "June 2026". `month` is 1–12. */

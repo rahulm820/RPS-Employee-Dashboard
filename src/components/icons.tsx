@@ -122,6 +122,15 @@ export function PhoneIcon(props: IconProps) {
   )
 }
 
+export function SparklesIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 3l1.8 4.7L18.5 9.5 13.8 11.3 12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3Z" />
+      <path d="M18 14l.8 2.2L21 17l-2.2.8L18 20l-.8-2.2L15 17l2.2-.8L18 14Z" />
+    </Svg>
+  )
+}
+
 export function MenuIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -188,15 +197,6 @@ export function ClockIcon(props: IconProps) {
     <Svg {...props}>
       <circle cx="12" cy="12" r="9" />
       <path d="M12 7.5V12l3 2" />
-    </Svg>
-  )
-}
-
-export function CheckCircleIcon(props: IconProps) {
-  return (
-    <Svg {...props}>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M8.5 12l2.3 2.3L15.5 9.5" />
     </Svg>
   )
 }

@@ -4,6 +4,7 @@ import { Avatar } from '../ui'
 import { LogoIcon, CloseIcon } from '../icons'
 import { NAV_ITEMS } from '../../constants/navigation'
 import { APP_NAME, APP_TAGLINE, CURRENT_USER } from '../../constants/app'
+import { useCurrentUser } from '../../context/currentUserContext'
 import styles from './Sidebar.module.css'
 
 export interface SidebarProps {
@@ -13,6 +14,10 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ open, onClose }: SidebarProps) {
+  const { user } = useCurrentUser()
+  const name = user?.name ?? CURRENT_USER.name
+  const role = user?.role ?? CURRENT_USER.role
+
   return (
     <>
       <div
@@ -55,10 +60,10 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </nav>
 
         <div className={styles.footer}>
-          <Avatar name={CURRENT_USER.name} size="sm" status="online" />
+          <Avatar name={name} size="sm" status={user?.status ?? 'online'} />
           <span className={styles.userText}>
-            <span className={styles.userName}>{CURRENT_USER.name}</span>
-            <span className={styles.userRole}>{CURRENT_USER.role}</span>
+            <span className={styles.userName}>{name}</span>
+            <span className={styles.userRole}>{role}</span>
           </span>
         </div>
       </aside>

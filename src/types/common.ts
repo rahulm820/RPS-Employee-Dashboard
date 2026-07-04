@@ -11,13 +11,6 @@ export type ISODateTime = string
 /** "HH:mm" 24-hour clock time, e.g. "09:05". */
 export type ClockTime = string
 
-export interface Paginated<T> {
-  items: T[]
-  total: number
-  page: number
-  pageSize: number
-}
-
 /** Generic async view state used by data hooks. */
 export interface AsyncState<T> {
   data: T | undefined

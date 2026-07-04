@@ -1,5 +1,6 @@
 import { request } from '../lib/api'
-import { attendance, personalAttendance, employees } from '../data'
+import { attendance, personalAttendance } from '../data'
+import { getEmployeeMap } from './employeeService'
 import type {
   AttendanceRecord,
   AttendanceRecordView,
@@ -8,12 +9,8 @@ import type {
   MonthlyAttendance,
 } from '../types'
 
-function employeeMap() {
-  return new Map(employees.map((e) => [e.id, e]))
-}
-
 function withEmployees(records: AttendanceRecord[]): AttendanceRecordView[] {
-  const map = employeeMap()
+  const map = getEmployeeMap()
   return records.map((r) => ({ ...r, employee: map.get(r.employeeId) ?? null }))
 }
 
@@ -44,14 +41,6 @@ export function getAttendanceByDate(date: string, signal?: AbortSignal): Promise
 export function getDailyAttendance(signal?: AbortSignal): Promise<DailyAttendance> {
   const date = latestDate()
   return getAttendanceByDate(date, signal)
-}
-
-/** Distinct dates in the dataset, newest first. */
-export function getAttendanceDates(signal?: AbortSignal): Promise<string[]> {
-  return request(
-    () => [...new Set(attendance.map((r) => r.date))].sort((a, b) => b.localeCompare(a)),
-    { signal },
-  )
 }
 
 function pad(n: number): string {

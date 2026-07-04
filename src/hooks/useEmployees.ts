@@ -8,10 +8,6 @@ export function useEmployees(search = '') {
   return useAsync((signal) => employeeService.listEmployees(debounced, signal), [debounced])
 }
 
-export function useEmployee(id: string) {
-  return useAsync((signal) => employeeService.getEmployee(id, signal), [id])
-}
-
 /** Distinct team names for filter dropdowns. */
 export function useTeams() {
   return useAsync((signal) => employeeService.getTeams(signal), [])

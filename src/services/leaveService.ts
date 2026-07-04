@@ -1,5 +1,6 @@
 import { request } from '../lib/api'
-import { leaves, employees } from '../data'
+import { leaves } from '../data'
+import { getEmployeeMap } from './employeeService'
 import { CURRENT_USER_ID } from '../constants/app'
 import { daysInclusive } from '../utils/date'
 import type {
@@ -15,7 +16,7 @@ let store: LeaveRequest[] = [...leaves]
 let seq = store.length
 
 function withEmployee(list: LeaveRequest[]): LeaveRequestView[] {
-  const map = new Map(employees.map((e) => [e.id, e]))
+  const map = getEmployeeMap()
   return list.map((l) => ({ ...l, employee: map.get(l.employeeId) ?? null }))
 }
 
@@ -32,15 +33,6 @@ export function getMyLeaveRequests(
     () => withEmployee(sortByAppliedDesc(store.filter((l) => l.employeeId === employeeId))),
     { signal },
   )
-}
-
-/** All leave requests (e.g. an approver's queue). */
-export function getAllLeaveRequests(signal?: AbortSignal): Promise<LeaveRequestView[]> {
-  return request(() => withEmployee(sortByAppliedDesc(store)), { signal })
-}
-
-export function getPendingLeaveCount(signal?: AbortSignal): Promise<number> {
-  return request(() => store.filter((l) => l.status === 'pending').length, { signal })
 }
 
 /** Annual allowance per leave type (unpaid has none). */

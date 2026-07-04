@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Card, Avatar, Badge, Button } from '../ui'
 import { MailIcon, MapPinIcon, PhoneIcon } from '../icons'
 import { titleCase } from '../../utils'
@@ -12,7 +13,7 @@ const STATUS_DOT: Record<EmployeeStatus, string> = {
   away: styles.stAway,
 }
 
-export function EmployeeCard({ employee }: { employee: Employee }) {
+export const EmployeeCard = memo(function EmployeeCard({ employee }: { employee: Employee }) {
   const { name, role, team, email, phone, location, status } = employee
 
   function handleConnect() {
@@ -84,4 +85,4 @@ export function EmployeeCard({ employee }: { employee: Employee }) {
       </Button>
     </Card>
   )
-}
+})

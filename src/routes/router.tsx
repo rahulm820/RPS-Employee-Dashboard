@@ -1,13 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { RootLayout } from '../components/layout/RootLayout'
-import DashboardPage from '../pages/DashboardPage'
-import AttendancePage from '../pages/AttendancePage'
-import LeavePage from '../pages/LeavePage'
-import DirectoryPage from '../pages/DirectoryPage'
-import AnnouncementsPage from '../pages/AnnouncementsPage'
-import ProfilePage from '../pages/ProfilePage'
-import NotFoundPage from '../pages/NotFoundPage'
 import { ROUTES } from './paths'
+// Pages are code-split (see lazyPages) so each route loads its own chunk on
+// demand, keeping the initial bundle small. RootLayout renders a Suspense
+// fallback while a page chunk loads.
+import {
+  DashboardPage,
+  AttendancePage,
+  LeavePage,
+  DirectoryPage,
+  AnnouncementsPage,
+  ProfilePage,
+  NotFoundPage,
+} from './lazyPages'
 
 /**
  * Route tree. Each page carries a `handle.title` that the Topbar reads via

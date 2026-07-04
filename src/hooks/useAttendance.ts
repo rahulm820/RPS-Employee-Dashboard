@@ -6,11 +6,6 @@ export function useDailyAttendance() {
   return useAsync((signal) => attendanceService.getDailyAttendance(signal), [])
 }
 
-/** Attendance for a specific date. */
-export function useAttendanceByDate(date: string) {
-  return useAsync((signal) => attendanceService.getAttendanceByDate(date, signal), [date])
-}
-
 /** The current user's attendance for a given month. */
 export function useMyMonthlyAttendance(year: number, month: number) {
   return useAsync(
