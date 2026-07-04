@@ -1,0 +1,141 @@
+/* Leave management layout, form, summary, and history styles. */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-md);
+}
+.wide {
+  grid-template-columns: 3fr 2fr;
+}
+@media (max-width: 900px) {
+  .wide {
+    grid-template-columns: 1fr;
+  }
+}
+
+.widgetTitle {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* --- Request form --- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+@media (max-width: 480px) {
+  .dates {
+    grid-template-columns: 1fr;
+  }
+}
+.hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  padding: 0.625rem 0.75rem;
+  background: var(--color-surface-alt);
+  border-radius: var(--radius-sm);
+}
+.hintDays {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
+
+/* --- Balances summary --- */
+.balHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+.balTotal {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+}
+.balList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.balRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.balHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+.balName {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+.balRemain {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+}
+.track {
+  height: 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  overflow: hidden;
+}
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  transition: width 0.3s ease;
+}
+.balMeta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* --- History --- */
+.historyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+.filter {
+  width: 11rem;
+}
+.reason {
+  display: inline-block;
+  max-width: 22ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  color: var(--color-text-secondary);
+}

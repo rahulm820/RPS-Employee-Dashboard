@@ -1,5 +1,6 @@
 import { request } from '../lib/api'
-import { attendance, employees, leaves, leaveBalances } from '../data'
+import { attendance, employees, leaves } from '../data'
+import { computeLeaveBalances } from './leaveService'
 import type { DashboardStats } from '../types'
 
 /** Aggregate the headline figures shown on the dashboard overview. */
@@ -10,7 +11,7 @@ export function getDashboardStats(signal?: AbortSignal): Promise<DashboardStats>
     const present = today.filter((r) => r.status !== 'absent').length
     const attendanceRate = today.length === 0 ? 0 : present / today.length
 
-    const leaveRemaining = leaveBalances.reduce((sum, b) => sum + b.remaining, 0)
+    const leaveRemaining = computeLeaveBalances().reduce((sum, b) => sum + b.remaining, 0)
     const pendingRequests = leaves.filter((l) => l.status === 'pending').length
 
     return {
