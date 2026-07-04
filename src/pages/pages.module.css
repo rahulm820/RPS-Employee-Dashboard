@@ -1,0 +1,117 @@
+/* Shared page-level layout primitives (imported by page components). */
+
+.grid {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.stats {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.twoCol {
+  grid-template-columns: 2fr 1fr;
+}
+@media (max-width: 900px) {
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Stat card content */
+.statLabel {
+  margin: 0;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+.statValue {
+  margin: 0.25rem 0 0;
+  font-size: var(--font-size-stat);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  color: var(--color-accent);
+}
+.statMeta {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* Announcement feed */
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.feedItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+.feedItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.feedTitle {
+  margin: 0;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+.feedBody {
+  margin: 0;
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-body);
+}
+.feedMeta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* Directory grid */
+.people {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+.person {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.personText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.personName {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+}
+.personRole {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+/* Cell helpers */
+.cellUser {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
