@@ -25,3 +25,8 @@ export function getEmployee(id: string, signal?: AbortSignal): Promise<Employee>
 export function getEmployeeMap(): Map<string, Employee> {
   return new Map(employees.map((e) => [e.id, e]))
 }
+
+/** Distinct team names, alphabetically sorted (for filter dropdowns). */
+export function getTeams(signal?: AbortSignal): Promise<string[]> {
+  return request(() => [...new Set(employees.map((e) => e.team))].sort(), { signal })
+}

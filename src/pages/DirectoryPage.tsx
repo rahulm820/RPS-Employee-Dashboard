@@ -1,87 +1,52 @@
 import { useState } from 'react'
 import { PageHeader } from '../components/layout/PageHeader'
-import { Card, Avatar, Badge, Input, Skeleton, EmptyState, ErrorState } from '../components/ui'
-import { SearchIcon } from '../components/icons'
-import { useEmployees } from '../hooks/useEmployees'
-import type { EmployeeStatus } from '../types'
-import styles from './pages.module.css'
-
-const STATUS: Record<EmployeeStatus, 'online' | 'offline' | 'busy' | 'away'> = {
-  online: 'online',
-  offline: 'offline',
-  busy: 'busy',
-  away: 'away',
-}
+import { DirectoryToolbar, EmployeeGrid, type StatusFilter } from '../components/directory'
+import { useEmployees, useTeams } from '../hooks/useEmployees'
 
 export default function DirectoryPage() {
   const [search, setSearch] = useState('')
+  const [team, setTeam] = useState('all')
+  const [status, setStatus] = useState<StatusFilter>('all')
+
   const { data, loading, error, refetch } = useEmployees(search)
+  const teams = useTeams()
+
+  // Search is applied by the service; team/status are refined client-side.
+  const filtered = (data ?? []).filter(
+    (e) => (team === 'all' || e.team === team) && (status === 'all' || e.status === status),
+  )
+
+  const filtersActive = search.trim() !== '' || team !== 'all' || status !== 'all'
 
   return (
     <>
       <PageHeader
         title="Team directory"
-        description="Find colleagues across teams and their current status."
+        description="Find colleagues across teams and see who's available."
       />
 
-      <div style={{ maxWidth: 340, marginBottom: 'var(--space-md)' }}>
-        <Input
-          placeholder="Search by name, role, or team"
-          leftIcon={<SearchIcon />}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          aria-label="Search directory"
-        />
-      </div>
+      <DirectoryToolbar
+        search={search}
+        onSearch={setSearch}
+        team={team}
+        onTeam={setTeam}
+        teams={teams.data ?? []}
+        status={status}
+        onStatus={setStatus}
+        count={filtered.length}
+      />
 
-      {error && <ErrorState description="Couldn't load the directory." onRetry={refetch} />}
-
-      {loading && (
-        <div className={`${styles.grid} ${styles.people}`}>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Card key={i}>
-              <div className={styles.person}>
-                <Skeleton variant="circle" width="3.5rem" height="3.5rem" />
-                <div style={{ flex: 1 }}>
-                  <Skeleton width="70%" />
-                  <div style={{ height: 8 }} />
-                  <Skeleton width="45%" />
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
-
-      {data && data.length === 0 && (
-        <Card>
-          <EmptyState
-            title="No matches"
-            description={`No one matches “${search}”. Try a different name or team.`}
-          />
-        </Card>
-      )}
-
-      {data && data.length > 0 && (
-        <div className={`${styles.grid} ${styles.people}`}>
-          {data.map((p) => (
-            <Card key={p.id}>
-              <div className={styles.person}>
-                <Avatar name={p.name} size="lg" status={STATUS[p.status]} />
-                <div className={styles.personText}>
-                  <span className={styles.personName}>{p.name}</span>
-                  <span className={styles.personRole}>{p.role}</span>
-                  <span style={{ marginTop: 6 }}>
-                    <Badge variant="neutral" size="sm">
-                      {p.team}
-                    </Badge>
-                  </span>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
+      <EmployeeGrid
+        employees={filtered}
+        loading={loading}
+        error={error}
+        onRetry={refetch}
+        emptyDescription={
+          filtersActive
+            ? 'No one matches your search and filters. Try broadening them.'
+            : 'There are no employees to show yet.'
+        }
+      />
     </>
   )
 }

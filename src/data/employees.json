@@ -67,8 +67,8 @@
   },
   {
     "id": "emp-7",
-    "name": "Kabir Singh",
-    "email": "kabir.singh@rps.example",
+    "name": "Harshdeep Singh",
+    "email": "Harshdeep.singh@rps.example",
     "role": "QA Engineer",
     "team": "Platform",
     "status": "online",
@@ -78,8 +78,8 @@
   },
   {
     "id": "emp-8",
-    "name": "Priya Nair",
-    "email": "priya.nair@rps.example",
+    "name": "Ananya Rao",
+    "email": "ananya@rockpaperscissors.studio",
     "role": "HR Partner",
     "team": "People",
     "status": "online",
